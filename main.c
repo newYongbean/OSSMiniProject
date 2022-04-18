@@ -1,13 +1,19 @@
+// main.c
+#include <stdio.h>
+#include <string.h>
 #include "manager.h"
-//#define DEBUG
+#define DEBUG
 
 int main() {
 #ifdef DEBUG
         printf("Debug Mode\n");
 #endif
-        Product *p[20];
+        Product *p[SIZE];
 
         int count = 0, index = 0, menu, num;
+
+        count = loadData(p);
+        index = count;
 
         while(1) {
                 menu = selectMenu();
@@ -31,8 +37,8 @@ int main() {
                     updateProduct(p[num-1]);
                 }
                 else if (menu == 4){
-                    num = selectDataNo(p, index);
-                    if(num == 0) {
+                        num = selectDataNo(p, index);
+                        if(num == 0) {
                             printf("=> 취소됨!\n");
                             continue;
                         }
@@ -48,6 +54,25 @@ int main() {
                                 free(p[num-1]);
                             p[num-1] = NULL; 
                             count--;
+                }
+                else if(menu == 5){
+                        saveData(p, count);
+                }
+                else if(menu == 6) {
+                        searchProduct(p, count);
+                }
+                else if(menu == 6) {
+                        printf("검색 방법 선택 (1. 제품 이름 검색, 2. 가격 오름차순 검색, 3. 키워드 검색) : ");
+                        scanf("%d", &num);
+                        if(num == 1){ 
+                                searchProduct(&p[SIZE], count);
+                        }
+                        else if(num == 2) {
+                                searchAscendingPrice(&p[SIZE], count);
+                        }
+                        else if(num == 3) {
+                                searchKeyword(&p[SIZE], count);
+                        }
                 }
         }
         printf("종료됨!\n");
